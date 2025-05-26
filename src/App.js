@@ -1,19 +1,14 @@
-import {BrowserRouter as Router, Routes,Routes} from "react-router-dom";
 import Navbar from './componentes/navbar';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Incluye el comportamiento del botón
 
-const App = () => {
+import React from 'react';
+
+function App (){
   return (
-    <Router>
+    <div>
       <Navbar/>
-      <div className='p-4'>
-        <Routes>
-          <Route path="/" element= {<h1>Inicio</h1>}/>
-          <Route path="/acerca" element= {<h1>Acerca</h1>}/>
-          <Route path="/contacto" element= {<h1>Contacto</h1>}/>
-
-        </Routes>
-      </div>
-    </Router>
+    </div>
   );
 };
 
