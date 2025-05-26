@@ -1,0 +1,7 @@
+.gitignore
+
+Este archivo le dice a Git que ignore ciertas carpetas o archivos, y node_modules es una de las más comunes porque:
+
+Contiene miles de archivos y megas innecesarios para el repo.
+
+Se puede reconstruir fácilmente usando npm install o yarn install gracias al archivo package.json.

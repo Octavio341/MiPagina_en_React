@@ -1,0 +1,28 @@
+-- Agrega los archivos modificados o nuevos:
+
+git add .
+
+--- Crea un commit con un mensaje descriptivo:
+
+git commit -m "Mensaje claro de lo que hiciste"
+
+-----
+Ejemplos:
+
+"Agregada sección de contacto"
+
+"Corregido error en formulario"
+
+"Estilos actualizados para móvil"
+
+--- Sube los cambios al repositorio remoto (GitHub):
+
+git push origin master
+
+----
+tambie se puede cambiar master por  main con esa rama
+
+
+----- consejo --- para ver que archivos cambiaste antes de subir 
+
+git status
