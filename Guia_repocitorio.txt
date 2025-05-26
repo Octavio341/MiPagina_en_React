@@ -26,3 +26,9 @@ tambie se puede cambiar master por  main con esa rama
 ----- consejo --- para ver que archivos cambiaste antes de subir 
 
 git status
+
+--- resumen --- uso rapido 
+
+git add .
+git commit -m "Tu cambio"
+git push origin master
