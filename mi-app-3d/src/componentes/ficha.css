@@ -1,0 +1,43 @@
+.ficha-brillante {
+  background: linear-gradient(135deg, #0047ab, #00c6ff);
+  color: white;
+  border-radius: 1rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 10px #00c6ff,
+    0 0 20px #00c6ff,
+    0 0 30px #0047ab,
+    0 0 40px #0047ab;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.ficha-brillante.hovered {
+  animation: glowPulse 1.5s ease-in-out infinite alternate;
+  transform: translateY(-10px) scale(1.05);
+  box-shadow:
+    0 0 20px #00e0ff,
+    0 0 30px #00e0ff,
+    0 0 40px #0066ff,
+    0 0 50px #0066ff;
+}
+
+/* Animación de brillo pulsante */
+@keyframes glowPulse {
+  0% {
+    box-shadow:
+      0 0 10px #00c6ff,
+      0 0 20px #00c6ff,
+      0 0 30px #0047ab,
+      0 0 40px #0047ab;
+  }
+  100% {
+    box-shadow:
+      0 0 25px #00e0ff,
+      0 0 40px #00e0ff,
+      0 0 50px #0066ff,
+      0 0 60px #0066ff;
+  }
+}
+
