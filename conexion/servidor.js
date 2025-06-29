@@ -229,6 +229,23 @@ app.put('/api/fichas/:id/vista', async (req, res) => {
   }
 });
 
+// Ruta GET para obtener el contador de descargas de una ficha
+app.get('/api/fichas/:id/descargas', async (req, res) => {
+  try {
+    const ficha = await Ficha.findById(req.params.id, 'recomendaciones.contador_descargas');
+    if (!ficha) {
+      return res.status(404).json({ message: 'Ficha no encontrada' });
+    }
+
+    const contador = ficha.recomendaciones?.contador_descargas || 0;
+    res.json({ contador_descargas: contador });
+  } catch (error) {
+    console.error('Error al obtener contador de descargas:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
+
+
 app.put('/api/fichas/:id/descarga', async (req, res) => {
   try {
     const ficha = await Ficha.findById(req.params.id);

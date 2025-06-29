@@ -218,21 +218,36 @@ function Contacto({ contacto }) {
   );
 
 }
+
+
 function Recomendacion({ recomendaciones = {}, fichaId }) {
+  // Inicializa con el dato que ya tienes para que muestre rápido
+  const [contador, setContador] = useState(recomendaciones.contador_descargas ?? 0);
   const [descargando, setDescargando] = useState(false);
-  const [contador, setContador] = useState(0);
 
   const {
     titulo = 'Sin título',
     imagen = '',
     descripcion = 'Sin descripción',
     linkDescargaPDF = '',
-    contador_descargas = 0,
   } = recomendaciones;
 
-  useEffect(() => {
-    setContador(contador_descargas);
-  }, [contador_descargas]);
+  // Actualiza rápido con el dato más reciente del backend
+ useEffect(() => {
+  if (!fichaId) return;
+
+  const interval = setInterval(() => {
+    fetch(`http://localhost:3001/api/fichas/${fichaId}/descargas`)
+      .then(res => res.json())
+      .then(data => {
+        setContador(data.contador_descargas || 0);
+      })
+      .catch(console.error);
+  }, 5000);
+
+  return () => clearInterval(interval);
+}, [fichaId]);
+
 
   const handleDescarga = async () => {
     if (!fichaId) {
@@ -265,11 +280,6 @@ function Recomendacion({ recomendaciones = {}, fichaId }) {
       setDescargando(false);
     }
   };
-
-  // Opcional: si quieres mostrar algo mientras no hay recomendaciones
-  if (!recomendaciones) {
-    return <div className="text-muted p-3">Cargando recomendaciones...</div>;
-  }
 
   return (
     <div className="row bg-white rounded shadow p-4 align-items-center">
@@ -305,7 +315,6 @@ function Recomendacion({ recomendaciones = {}, fichaId }) {
     </div>
   );
 }
-
 
 function CarruselFicha({ ficha, onClose }) {
   const [vistaRegistrada, setVistaRegistrada] = useState(false);
