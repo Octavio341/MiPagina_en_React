@@ -1,0 +1,75 @@
+/* Estilos para inputs con error */
+.input-error {
+  border-color: #dc3545 !important; /* rojo bootstrap */
+  background-color: #f8d7da;
+  color: #721c24;
+  transition: background-color 0.3s ease;
+}
+
+.input-error::placeholder {
+  color: #721c24 !important;
+  opacity: 1;
+}
+
+/* Mejora del botón */
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+  font-weight: 600;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  box-shadow: 0 0 10px rgba(33, 136, 56, 0.5);
+}
+
+/* Container del formulario */
+.container {
+  max-width: 720px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+/* Títulos secciones */
+h4 {
+  margin-top: 30px;
+  font-weight: 700;
+  color: #343a40;
+  border-bottom: 2px solid #28a745;
+  padding-bottom: 6px;
+}
+
+/* Inputs generales */
+input.form-control {
+  border-radius: 8px;
+  box-shadow: none;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input.form-control:focus {
+  border-color: #28a745;
+  box-shadow: 0 0 8px rgba(40,167,69,0.4);
+  outline: none;
+}
+
+/* Margen entre inputs */
+input.form-control + input.form-control {
+  margin-top: 12px;
+}
+
+/* Para inputs tipo date y number (alineación y tamaño) */
+input[type="date"],
+input[type="number"] {
+  max-width: 220px;
+}
+
+/* Responsive para columnas latitud/longitud */
+@media (max-width: 576px) {
+  .row > .col {
+    margin-bottom: 15px;
+  }
+}
