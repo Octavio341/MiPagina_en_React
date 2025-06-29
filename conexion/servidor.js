@@ -181,34 +181,75 @@ app.get('/api/fichas', async (req, res) => {
 //=== PUERTO GENERAL 
 //////
 
+// Obtener ficha completa (o solo contar_vista) sin modificar nada
+app.get('/api/fichas/:id', async (req, res) => {
+  try {
+    const ficha = await Ficha.findById(req.params.id);
+    if (!ficha) {
+      return res.status(404).json({ message: 'Ficha no encontrada' });
+    }
+    res.json(ficha);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener ficha' });
+  }
+});
 
 /// para las vistas 
 // Ejemplo en Express.js
 // PUT /api/fichas/:id/vista
-// PUT /api/fichas/:id/vista/:userId?
+app.get('/api/fichas/:id/vista', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const ficha = await Ficha.findById(id);
+    if (!ficha) return res.status(404).json({ mensaje: 'Ficha no encontrada' });
+    res.json({ contar_vista: ficha.contar_vista || 0 });
+  } catch (err) {
+    res.status(500).json({ mensaje: 'Error al obtener vista' });
+  }
+});
+
 app.put('/api/fichas/:id/vista', async (req, res) => {
   try {
     const { id } = req.params;
 
-    const ficha = await Ficha.findById(id);
+    const ficha = await Ficha.findByIdAndUpdate(
+      id,
+      { $inc: { contar_vista: 1 } },
+      { new: true }
+    );
+
     if (!ficha) {
-      return res.status(404).json({ mensaje: 'Ficha no encontrada' });
+      return res.status(404).json({ message: 'Ficha no encontrada' });
     }
 
-    ficha.contar_vista = (ficha.contar_vista || 0) + 1;
-    await ficha.save();
-
-    return res.json({
-      mensaje: 'Vista registrada correctamente',
-      contar_vista: ficha.contar_vista,
-    });
+    res.json(ficha);
   } catch (error) {
-    console.error('❌ Error al registrar vista:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    console.error(error);
+    res.status(500).json({ message: 'Error al actualizar vistas' });
   }
 });
 
+app.put('/api/fichas/:id/descarga', async (req, res) => {
+  try {
+    const ficha = await Ficha.findById(req.params.id);
+    if (!ficha) {
+      console.log('Ficha no encontrada'); // 👈 imprime en consola
+      return res.status(404).json({ message: 'Ficha no encontrada' });
+    }
 
+    ficha.recomendaciones = ficha.recomendaciones || {};
+    ficha.recomendaciones.contador_descargas = (ficha.recomendaciones.contador_descargas || 0) + 1;
+
+    console.log('Contador actualizado:', ficha.recomendaciones.contador_descargas); // 👈 imprime en consola
+
+    await ficha.save();
+
+    res.json({ contador_descargas: ficha.recomendaciones.contador_descargas });
+  } catch (error) {
+    console.error('Error al registrar descarga:', error); // 👈 error en consola
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
 
 
 ///////

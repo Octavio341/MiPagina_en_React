@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;  // <--- EXTRAER Schema para usar Types.ObjectId
+const { Schema } = mongoose;
 
 const fichaSchema = new Schema({
   titulo: {
@@ -52,5 +52,17 @@ const fichaSchema = new Schema({
 // Índice geoespacial para consultas por ubicación
 fichaSchema.index({ 'contactoInformacion.mapa.coordinates': '2dsphere' });
 
-module.exports = mongoose.model('Ficha', fichaSchema);
+// Virtual para agregar "id" que será string del _id
+fichaSchema.virtual('id').get(function() {
+  return this._id.toHexString();
+});
 
+// Para incluir los virtuales en toJSON (y también en toObject si quieres)
+fichaSchema.set('toJSON', {
+  virtuals: true,
+});
+fichaSchema.set('toObject', {
+  virtuals: true,
+});
+
+module.exports = mongoose.model('Ficha', fichaSchema);
