@@ -1,0 +1,5 @@
+textarea.form-control {
+  min-height: 100px; /* altura mínima para las áreas de texto */
+  resize: vertical;  /* permite cambiar tamaño vertical */
+  white-space: pre-wrap; /* mantiene saltos de línea */
+}

@@ -27,13 +27,13 @@ function NatvarUs() {
             <Link className="nav-link" to="/explorar">Explorar</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/mapa">Mapa</Link>
-          </li>
-          <li className="nav-item">
             <Link className="nav-link" to="/contacto">Contacto</Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/vistaus">Vista</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/estadistica">Estadisticas</Link>
           </li>
         </ul>
       </div>

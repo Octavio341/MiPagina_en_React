@@ -1,12 +1,10 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Slider from "react-slick";
-import axios from "axios";
-import PanelSimulacion from './PanelSimulacion'
-import { FaDownload } from "react-icons/fa"; // Asegúrate de instalar react-icons
+import { FaDownload } from "react-icons/fa";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './vista.css'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./vista.css";
 
 function Portada({ ficha }) {
   const [datosActualizados, setDatosActualizados] = useState(null);
@@ -15,43 +13,45 @@ function Portada({ ficha }) {
     if (!ficha?._id) return;
 
     fetch(`http://localhost:3001/api/fichas/${ficha._id}`, {
-      headers: { 'Cache-Control': 'no-cache' }
+      headers: { "Cache-Control": "no-cache" },
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setDatosActualizados(data);
       })
       .catch(console.error);
   }, [ficha]);
 
-  if (!datosActualizados) return <div className="text-muted">Cargando ficha actualizada...</div>;
+  if (!datosActualizados)
+    return <div className="text-muted">Cargando ficha actualizada...</div>;
 
   return (
     <div
       className="position-relative text-white rounded overflow-hidden shadow-lg d-flex"
-      style={{ width: '100%', maxWidth: '1000px', height: '400px', margin: '0 auto' }}
+      style={{ width: "100%", maxWidth: "1000px", height: "400px", margin: "0 auto" }}
     >
       <img
         src={datosActualizados.imagenPortada}
         alt="portada"
         style={{
-          width: '65%',
-          height: '100%',
-          objectFit: 'cover',
-          borderTopLeftRadius: '0.5rem',
-          borderBottomLeftRadius: '0.5rem',
+          width: "65%",
+          height: "100%",
+          objectFit: "cover",
+          borderTopLeftRadius: "0.5rem",
+          borderBottomLeftRadius: "0.5rem",
         }}
       />
       <div
         className="bg-dark bg-opacity-90 p-3 d-flex flex-column justify-content-center"
-        style={{ width: '95%', borderTopRightRadius: '0.5rem', borderBottomRightRadius: '9.5rem' }}
+        style={{ width: "95%", borderTopRightRadius: "0.5rem", borderBottomRightRadius: "9.5rem" }}
       >
         <h2 className="fw-bold fs-9">{datosActualizados.titulo}</h2>
         <p className="mb-2 fs-5">
           👁️ <strong>{datosActualizados.contar_vista}</strong> vistas
         </p>
         <p className="mb-2 fs-5">
-          ⬇️ <strong>{datosActualizados.recomendaciones?.contador_descargas || 0}</strong> descargas
+          ⬇️ <strong>{datosActualizados.recomendaciones?.contador_descargas || 0}</strong>{" "}
+          descargas
         </p>
         <p className="mb-2 fs-5">
           🕒 <strong>{datosActualizados.fecha}</strong>
@@ -64,18 +64,10 @@ function Portada({ ficha }) {
   );
 }
 
-
-function Informacion({ ficha ,token}) {const [vistas, setVistas] = useState(0);
+function Informacion({ ficha }) {
   if (!ficha) return <div className="p-3">Cargando ficha...</div>;
 
-  const {
-    titulo,
-    imagenInfo,
-    info1,
-    info2,
-    info3,
-    info4,
-  } = ficha;
+  const { titulo, imagenInfo, info1, info2, info3, info4 } = ficha;
 
   const descripciones = [info1, info2, info3, info4].filter(Boolean);
 
@@ -145,7 +137,6 @@ function Informacion({ ficha ,token}) {const [vistas, setVistas] = useState(0);
       </div>
 
       {descripciones.length > 1 ? (
-        
         <Slider {...settings}>
           {descripciones.map((desc, i) => (
             <div key={i}>
@@ -159,12 +150,8 @@ function Informacion({ ficha ,token}) {const [vistas, setVistas] = useState(0);
         <p className="text-muted">Sin información disponible</p>
       )}
     </div>
-    
   );
-  
 }
-
-
 
 function Contacto({ contacto }) {
   if (!contacto) return <p className="p-3">Información de contacto no disponible</p>;
@@ -173,7 +160,6 @@ function Contacto({ contacto }) {
 
   return (
     <div className="row bg-white rounded shadow p-4 align-items-center">
-      {/* Columna del mapa a la izquierda */}
       <div className="col-md-6 mb-3 mb-md-0">
         {mapa?.coordinates ? (
           <iframe
@@ -202,62 +188,63 @@ function Contacto({ contacto }) {
         )}
       </div>
 
-      {/* Columna de contacto a la derecha */}
       <div className="col-md-6">
         <h3>Contacto</h3>
-        <p className="mb-2">📞 <strong>Teléfono:</strong> {telefono || 'No disponible'}</p>
+        <p className="mb-2">
+          📞 <strong>Teléfono:</strong> {telefono || "No disponible"}
+        </p>
         <p className="mb-2">
           🌐 <strong>Sitio Web:</strong>{" "}
           {sitioWeb ? (
-            <a href={sitioWeb} className="text-primary" target="_blank" rel="noopener noreferrer">
+            <a
+              href={sitioWeb}
+              className="text-primary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {sitioWeb}
             </a>
           ) : (
-            'No disponible'
+            "No disponible"
           )}
         </p>
-        <p className="mb-0">📧 <strong>Email:</strong> {email || 'No disponible'}</p>
+        <p className="mb-0">
+          📧 <strong>Email:</strong> {email || "No disponible"}
+        </p>
       </div>
     </div>
   );
+}
 
-}function Recomendacion({ recomendaciones = {}, fichaId }) {
+function Recomendacion({ recomendaciones = {}, fichaId }) {
+  const [contador, setContador] = useState(recomendaciones.contador_descargas ?? 0);
   const [descargando, setDescargando] = useState(false);
-  const [contador, setContador] = useState(0); // Inicializa en 0
 
   const {
-    titulo = 'Sin título',
-    imagen = '',
-    descripcion = 'Sin descripción',
-    linkDescargaPDF = '',
-    contador_descargas,
+    titulo = "Sin título",
+    imagen = "",
+    descripcion = "Sin descripción",
+    linkDescargaPDF = "",
   } = recomendaciones;
 
-  // Si cambian las props, también actualizar
-  useEffect(() => {
-    if (typeof contador_descargas === 'number') {
-      setContador(contador_descargas);
-    }
-  }, [contador_descargas]);
-
-  // Siempre busca en el backend el valor más actualizado
   useEffect(() => {
     if (!fichaId) return;
 
-    fetch(`http://localhost:3001/api/fichas/${fichaId}/descargas`)
-      .then(res => res.json())
-      .then(data => {
-        setContador(data.contador_descargas || 0);
-      })
-      .catch(err => {
-        console.error('Error al obtener descargas:', err);
-        setContador(0);
-      });
+    const interval = setInterval(() => {
+      fetch(`http://localhost:3001/api/fichas/${fichaId}/descargas`)
+        .then((res) => res.json())
+        .then((data) => {
+          setContador(data.contador_descargas || 0);
+        })
+        .catch(console.error);
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [fichaId]);
 
   const handleDescarga = async () => {
     if (!fichaId) {
-      console.error('❌ fichaId no disponible para descarga');
+      console.error("❌ fichaId no disponible para descarga");
       return;
     }
 
@@ -265,8 +252,8 @@ function Contacto({ contacto }) {
       setDescargando(true);
 
       const res = await fetch(`http://localhost:3001/api/fichas/${fichaId}/descarga`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({}),
       });
 
@@ -276,12 +263,12 @@ function Contacto({ contacto }) {
       }
 
       if (linkDescargaPDF) {
-        window.open(linkDescargaPDF, '_blank', 'noopener,noreferrer');
+        window.open(linkDescargaPDF, "_blank", "noopener,noreferrer");
       } else {
-        console.warn('⚠️ No hay linkDescargaPDF disponible');
+        console.warn("⚠️ No hay linkDescargaPDF disponible");
       }
     } catch (error) {
-      console.error('Error al registrar descarga:', error);
+      console.error("Error al registrar descarga:", error);
     } finally {
       setDescargando(false);
     }
@@ -295,7 +282,7 @@ function Contacto({ contacto }) {
             src={imagen}
             alt="recomendación"
             className="img-fluid rounded shadow-sm"
-            style={{ objectFit: 'cover', width: '100%', maxHeight: '400px' }}
+            style={{ objectFit: "cover", width: "100%", maxHeight: "400px" }}
           />
         ) : (
           <div className="text-muted">Sin imagen</div>
@@ -311,7 +298,7 @@ function Contacto({ contacto }) {
           className="btn btn-outline-primary mt-3 d-inline-flex align-items-center"
         >
           <FaDownload className="me-2" />
-          {descargando ? 'Registrando...' : 'Abrir PDF'}
+          {descargando ? "Registrando..." : "Abrir PDF"}
         </button>
 
         <p className="mt-2 text-muted">
@@ -322,8 +309,7 @@ function Contacto({ contacto }) {
   );
 }
 
-
-function CarruselFicha({ ficha, onClose }) {
+export default function ExploradorConDetalle({ ficha, onCerrar }) {
   const [vistaRegistrada, setVistaRegistrada] = useState(false);
   const vistaRegistradaRef = useRef(false);
 
@@ -352,11 +338,7 @@ function CarruselFicha({ ficha, onClose }) {
       }
     },
     afterChange: (current) => {
-      if (
-        current === 1 &&
-        ficha?._id &&
-        !vistaRegistradaRef.current
-      ) {
+      if (current === 1 && ficha?._id && !vistaRegistradaRef.current) {
         registrarVista(ficha._id);
         vistaRegistradaRef.current = true;
         setVistaRegistrada(true);
@@ -373,24 +355,18 @@ function CarruselFicha({ ficha, onClose }) {
 
   async function registrarVista(idFicha) {
     try {
-      const response = await fetch(
-        `http://localhost:3001/api/fichas/${idFicha}/vista`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({}),
-        }
-      );
+      const response = await fetch(`http://localhost:3001/api/fichas/${idFicha}/vista`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
 
       const data = await response.json();
 
       if (response.ok) {
         console.log("👁️ Vista registrada:", data);
       } else {
-        console.error(
-          "❌ Error registrando vista:",
-          data.mensaje || "Error desconocido"
-        );
+        console.error("❌ Error registrando vista:", data.mensaje || "Error desconocido");
       }
     } catch (error) {
       console.error("❌ Error de red al registrar vista:", error.message);
@@ -421,7 +397,7 @@ function CarruselFicha({ ficha, onClose }) {
         }}
       >
         <button
-          onClick={onClose}
+          onClick={onCerrar}
           className="btn btn-danger position-absolute top-0 end-0 m-2"
           style={{
             fontSize: "1.4rem",
@@ -441,100 +417,20 @@ function CarruselFicha({ ficha, onClose }) {
         </button>
 
         <Slider {...settings}>
-            <div style={{ width: "100%", minHeight: "300px" }}>
-              <Portada ficha={ficha} />
-            </div>
-            <div style={{ width: "100%", minHeight: "300px" }}>
-              <Informacion ficha={infoData} vistaRegistrada={vistaRegistrada} />
-
-            </div>
-            <div style={{ width: "100%", minHeight: "300px" }}>
-              <Contacto contacto={ficha.contactoInformacion} />
-            </div>
-            <div style={{ width: "100%", minHeight: "300px" }}>
-              <Recomendacion recomendaciones={ficha.recomendaciones} fichaId={ficha._id}  />
-            </div>
+          <div style={{ width: "100%", minHeight: "300px" }}>
+            <Portada ficha={ficha} />
+          </div>
+          <div style={{ width: "100%", minHeight: "300px" }}>
+            <Informacion ficha={infoData} />
+          </div>
+          <div style={{ width: "100%", minHeight: "300px" }}>
+            <Contacto contacto={ficha.contactoInformacion} />
+          </div>
+          <div style={{ width: "100%", minHeight: "300px" }}>
+            <Recomendacion recomendaciones={ficha.recomendaciones} fichaId={ficha._id} />
+          </div>
         </Slider>
-
       </div>
-    </div>
-  );
-}
-
-function Card({ ficha, onClick }) {
-  return (
-    <div
-      onClick={() => onClick(ficha)}
-      className="card shadow-sm border-0"
-      style={{
-        cursor: "pointer",
-        transition: "transform 0.3s, box-shadow 0.3s",
-        minWidth: "300px",     // tamaño mínimo ancho
-        minHeight: "320px",    // tamaño mínimo alto
-        display: "flex",
-        flexDirection: "column",
-      }}
-      onMouseEnter={e => {
-        e.currentTarget.style.transform = "scale(1.03)";
-        e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.15)";
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.transform = "scale(1)";
-        e.currentTarget.style.boxShadow = "0 0.125rem 0.25rem rgba(0,0,0,0.075)";
-      }}
-    >
-      <img
-        src={ficha.imagenPortada}
-        className="card-img-top"
-        alt={ficha.titulo}
-        style={{ height: "200px", objectFit: "cover" }}
-      />
-      <div className="card-body d-flex flex-column justify-content-center flex-grow-1">
-        <h5 className="card-title text-center fw-semibold">{ficha.titulo}</h5>
-      </div>
-    </div>
-  );
-}
-
-export default function Publicar() {
-  const [fichas, setFichas] = useState([]);
-  const [fichaActiva, setFichaActiva] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    fetch("http://localhost:3001/api/fichas")
-      .then((res) => {
-        if (!res.ok) throw new Error("Error al cargar fichas");
-        return res.json();
-      })
-      .then((data) => {
-        setFichas(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) return <div className="text-center my-5">Cargando fichas...</div>;
-  if (error) return <div className="text-center my-5 text-danger">Error: {error}</div>;
-  return (
-    <div className="container py-5">
-      <h1 className="text-center mb-5 fw-bold display-5">Galería de Fichas</h1>
-      
-      {fichaActiva ? (
-        <CarruselFicha ficha={fichaActiva} onClose={() => setFichaActiva(null)} />
-      ) : (
-        <div className="row row-cols-1 row-cols-md-3 g-4">
-          {fichas.map((ficha) => (
-            <div className="col" key={ficha._id || ficha.id}>
-              <Card ficha={ficha} onClick={setFichaActiva} />
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }

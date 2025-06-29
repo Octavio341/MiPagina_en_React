@@ -18,6 +18,10 @@ mongoose.connect('mongodb://localhost:27017/Estancias', {
 const Ficha = require('./Ficha');
 
 
+/// PARA CONTACTO 
+const nodemailer = require('nodemailer');
+
+
 // Registro de usuario
 app.post('/api/register', async (req, res) => {
   try {
@@ -268,6 +272,170 @@ app.put('/api/fichas/:id/descarga', async (req, res) => {
   }
 });
 
+
+/// ELEMINAR 
+app.delete('/api/fichas/:id/delete', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const fichaEliminada = await Ficha.findByIdAndDelete(id);
+
+    if (!fichaEliminada) {
+      return res.status(404).json({ mensaje: 'Ficha no encontrada' });
+    }
+
+    res.json({ mensaje: 'Ficha eliminada correctamente', ficha: fichaEliminada });
+  } catch (error) {
+    console.error('Error al eliminar ficha:', error);
+    res.status(500).json({ mensaje: 'Error en el servidor' });
+  }
+});
+
+
+///// DUPLICAR 
+
+// Ruta para duplicar ficha
+app.post('/api/fichas/:id/duplicar', async (req, res) => {
+  try {
+    const fichaOriginal = await Ficha.findById(req.params.id);
+    if (!fichaOriginal) {
+      return res.status(404).json({ mensaje: 'Ficha no encontrada' });
+    }
+
+    const nuevaFichaData = fichaOriginal.toObject();
+    delete nuevaFichaData._id;
+    nuevaFichaData.titulo = nuevaFichaData.titulo + ' (Copia)';
+    nuevaFichaData.fecha = new Date().toISOString();
+
+    const fichaDuplicada = new Ficha(nuevaFichaData);
+    await fichaDuplicada.save();
+
+    res.status(201).json({
+      mensaje: 'Ficha duplicada con éxito',
+      ficha: fichaDuplicada,
+    });
+  } catch (error) {
+    console.error('Error duplicando ficha:', error);
+    res.status(500).json({ mensaje: 'Error interno al duplicar ficha' });
+  }
+});
+
+app.put('/api/fichas/:id/actualizar', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const ficha = await Ficha.findById(id);
+    if (!ficha) {
+      return res.status(404).json({ mensaje: 'Ficha no encontrada' });
+    }
+
+    const actualizaciones = {};
+
+    if (req.body.titulo && req.body.titulo !== ficha.titulo) {
+      ficha.titulo = req.body.titulo;
+      actualizaciones.titulo = req.body.titulo;
+    }
+
+    if (req.body.imagenPortada && req.body.imagenPortada !== ficha.imagenPortada) {
+      ficha.imagenPortada = req.body.imagenPortada;
+      actualizaciones.imagenPortada = req.body.imagenPortada;
+    }
+
+    if (req.body.fecha && req.body.fecha !== ficha.fecha) {
+      ficha.fecha = req.body.fecha;
+      actualizaciones.fecha = req.body.fecha;
+    }
+
+    if (req.body.calificacion !== undefined && req.body.calificacion !== ficha.calificacion) {
+      ficha.calificacion = req.body.calificacion;
+      actualizaciones.calificacion = req.body.calificacion;
+    }
+
+    if (typeof req.body.contar_vista === 'number' && req.body.contar_vista >= 0) {
+      ficha.contar_vista = req.body.contar_vista;
+      actualizaciones.contar_vista = req.body.contar_vista;
+    }
+
+    // ✅ CORRECTA actualización de contador_descargas
+    if (typeof req.body.recomendaciones?.contador_descargas === 'number' && req.body.recomendaciones.contador_descargas >= 0) {
+      if (!ficha.recomendaciones) ficha.recomendaciones = {};
+      ficha.recomendaciones.contador_descargas = req.body.recomendaciones.contador_descargas;
+      actualizaciones.contador_descargas = req.body.recomendaciones.contador_descargas;
+    }
+
+    // ✅ Ahora sí actualizamos el resto de recomendaciones sin pisar el contador
+    ficha.recomendaciones = {
+      ...ficha.recomendaciones,
+      ...req.body.recomendaciones,
+      contador_descargas: ficha.recomendaciones.contador_descargas, // asegurar que se conserve
+    };
+
+    // ✅ Contenido General
+    ficha.contenidoGeneral = {
+      ...ficha.contenidoGeneral,
+      ...req.body.contenidoGeneral,
+    };
+    if (req.body.contenidoGeneral) {
+      actualizaciones.contenidoGeneral = req.body.contenidoGeneral;
+    }
+
+    // ✅ Contacto e Información
+    ficha.contactoInformacion = {
+      ...ficha.contactoInformacion,
+      ...req.body.contactoInformacion,
+    };
+    if (req.body.contactoInformacion) {
+      actualizaciones.contactoInformacion = req.body.contactoInformacion;
+    }
+
+    // ✅ Mostrar en consola los cambios aplicados
+    console.log('🔄 Actualizaciones realizadas:', actualizaciones);
+
+    await ficha.save();
+    res.json({ mensaje: 'Ficha actualizada correctamente', ficha });
+  } catch (error) {
+    console.error('❌ Error al actualizar la ficha:', error);
+    res.status(500).json({ mensaje: 'Error del servidor' });
+  }
+});
+
+
+// PARA CONTACTO 
+
+app.post("/api/contacto", async (req, res) => {
+  const { nombre, email, asunto, mensaje } = req.body;
+
+  // Configura el transporter con tu cuenta y contraseña de aplicación
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "li_octavio@unca.edu.mx",
+      pass: "bawv gtrr qrsk xhkb", // Usa tu app password si tienes 2FA
+    },
+  });
+
+  // Opciones del correo
+  const mailOptions = {
+    from: '"Tu Web" <li_octavio@unca.edu.mx>',  // Siempre tu correo aquí
+    to: "li_octavio@unca.edu.mx",               // Correo que recibe los mensajes
+    replyTo: email,                             // Para que puedas responder al remitente
+    subject: asunto || `Nuevo mensaje de ${nombre}`,  // Usa el asunto ingresado o un predeterminado
+    text: `
+Nombre: ${nombre}
+Correo del remitente: ${email}
+
+Mensaje:
+${mensaje}
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ success: true, message: "Correo enviado con éxito" });
+  } catch (err) {
+    console.error("Error al enviar:", err);
+    res.status(500).json({ success: false, message: "Error al enviar el correo" });
+  }
+});
 
 ///////
 const PORT = 3001;

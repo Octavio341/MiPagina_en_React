@@ -11,25 +11,31 @@ import NatvarUs from './componentes/usuario/NatvarUs';
 import VistaUs from './componentes/usuario/vistaUs';
 import Contacto from './componentes/usuario/Contacto';
 import ExplorarUs from './componentes/usuario/ExplorarUs';
-import MapaBUs from './componentes/usuario/MapaBUs';
+import PanelSimulacion from './componentes/Admin/PanelSimulacion';
+import Estadistica from './componentes/usuario/Estadistica';
+import { Link } from 'react-router-dom';
 
 function App() {
   const [modoAdmin, setModoAdmin] = useState(false);
 
   return (
     <>
-      {/* Navbar */}
       {modoAdmin ? <Natvar /> : <NatvarUs />}
-
-      {/* Botón cambiar modo */}
       <button
         onClick={() => setModoAdmin(!modoAdmin)}
-        style={{ position: 'fixed', top: 50, right: 10, zIndex: 1000 }}
+        style={{ position: 'fixed', top: '50px', right: '10px', zIndex: 1000 }}
       >
         Cambiar a {modoAdmin ? 'Usuario' : 'Admin'}
       </button>
 
-      {/* Rutas según modo */}
+      {modoAdmin && (
+        <div style={{ position: 'fixed', top: '90px', right: '10px', zIndex: 1000 }}>
+          <Link to="/panel" style={{ fontWeight: 'bold', color: 'blue' }}>
+            Ir a Panel de Simulación
+          </Link>
+        </div>
+      )}
+
       <Routes>
         {modoAdmin ? (
           <>
@@ -38,8 +44,7 @@ function App() {
             <Route path="/perfil" element={<Perfil />} />
             <Route path="/publicar" element={<Publicar />} />
             <Route path="/sesion" element={<Sesion />} />
-            {/* Otras rutas admin */}
-            {/* Ruta comodín: si no coincide, va a /vista */}
+            <Route path="/panel" element={<PanelSimulacion />} />
             <Route path="*" element={<Navigate to="/vista" replace />} />
           </>
         ) : (
@@ -48,9 +53,7 @@ function App() {
             <Route path="/vistaus" element={<VistaUs />} />
             <Route path="/contacto" element={<Contacto />} />
             <Route path="/explorar" element={<ExplorarUs />} />
-            <Route path="/mapa" element={<MapaBUs />} />
-            {/* Otras rutas usuario */}
-            {/* Ruta comodín: si no coincide, va a /explorar */}
+            <Route path="/estadistica" element={<Estadistica />} />
             <Route path="*" element={<Navigate to="/vistaus" replace />} />
           </>
         )}
@@ -58,6 +61,7 @@ function App() {
     </>
   );
 }
+
 
 export default function Root() {
   return (
