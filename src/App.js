@@ -1,19 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 
 import Natvar from "./componentes/Admin/Natvar";
 import Vista from './componentes/Admin/vista';
 import Perfil from "./componentes/Admin/Perfil";
 import Publicar from "./componentes/Admin/Publicar";
 import Sesion from "./componentes/Admin/Sesion";
+import PanelSimulacion from './componentes/Admin/PanelSimulacion';
 
 import NatvarUs from './componentes/usuario/NatvarUs';
 import VistaUs from './componentes/usuario/vistaUs';
 import Contacto from './componentes/usuario/Contacto';
 import ExplorarUs from './componentes/usuario/ExplorarUs';
-import PanelSimulacion from './componentes/Admin/PanelSimulacion';
 import Estadistica from './componentes/usuario/Estadistica';
-import { Link } from 'react-router-dom';
+import Acerca from './componentes/Acerca'; // nuevo componente
+import Collage from './componentes/usuario/Collage'
 
 function App() {
   const [modoAdmin, setModoAdmin] = useState(false);
@@ -27,14 +33,6 @@ function App() {
       >
         Cambiar a {modoAdmin ? 'Usuario' : 'Admin'}
       </button>
-
-      {modoAdmin && (
-        <div style={{ position: 'fixed', top: '90px', right: '10px', zIndex: 1000 }}>
-          <Link to="/panel" style={{ fontWeight: 'bold', color: 'blue' }}>
-            Ir a Panel de Simulación
-          </Link>
-        </div>
-      )}
 
       <Routes>
         {modoAdmin ? (
@@ -54,6 +52,8 @@ function App() {
             <Route path="/contacto" element={<Contacto />} />
             <Route path="/explorar" element={<ExplorarUs />} />
             <Route path="/estadistica" element={<Estadistica />} />
+            <Route path="/acerca" element={<Acerca />} /> {/* nueva ruta */}
+            <Route path="/collage" element={<Collage />} /> {/* nueva ruta */}
             <Route path="*" element={<Navigate to="/vistaus" replace />} />
           </>
         )}
@@ -61,7 +61,6 @@ function App() {
     </>
   );
 }
-
 
 export default function Root() {
   return (
