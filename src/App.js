@@ -18,9 +18,10 @@ import VistaUs from './componentes/usuario/vistaUs';
 import Contacto from './componentes/usuario/Contacto';
 import ExplorarUs from './componentes/usuario/ExplorarUs';
 import Estadistica from './componentes/usuario/Estadistica';
-import Acerca from './componentes/Acerca'; // nuevo componente
-import Collage from './componentes/usuario/Collage'
+import Acerca from './componentes/Acerca';
+import Collage from './componentes/usuario/Collage';
 import CollagePadre from './componentes/usuario/CollagePadre';
+import Footer from './componentes/usuario/Footer';
 
 function App() {
   const [modoAdmin, setModoAdmin] = useState(false);
@@ -28,38 +29,90 @@ function App() {
   return (
     <>
       {modoAdmin ? <Natvar /> : <NatvarUs />}
-      <button
-        onClick={() => setModoAdmin(!modoAdmin)}
-        style={{ position: 'fixed', top: '50px', right: '10px', zIndex: 1000 }}
-      >
-        Cambiar a {modoAdmin ? 'Usuario' : 'Admin'}
-      </button>
 
       <Routes>
         {modoAdmin ? (
           <>
-            <Route path="/" element={<Vista />} />
-            <Route path="/vista" element={<Vista />} />
-            <Route path="/perfil" element={<Perfil />} />
-            <Route path="/publicar" element={<Publicar />} />
-            <Route path="/sesion" element={<Sesion />} />
-            <Route path="/panel" element={<PanelSimulacion />} />
-            <Route path="*" element={<Navigate to="/vista" replace />} />
+            <Route
+              path="/"
+              element={<Vista />}
+            />
+            <Route
+              path="/vista"
+              element={<Vista />}
+            />
+            <Route
+              path="/perfil"
+              element={<Perfil setModoAdmin={setModoAdmin} />} // Pasamos setModoAdmin para cerrar sesión
+            />
+            <Route
+              path="/publicar"
+              element={<Publicar />}
+            />
+            <Route
+              path="/collage"
+              element={<Collage />}
+            />
+            <Route
+              path="/sesion"
+              element={<Sesion setModoAdmin={setModoAdmin} />} // Para activar modo admin al iniciar sesión
+            />
+            <Route
+              path="/panel"
+              element={<PanelSimulacion />}
+            />
+            <Route
+              path="*"
+              element={<Navigate to="/vista" replace />}
+            />
           </>
         ) : (
           <>
-            <Route path="/" element={<VistaUs />} />
-            <Route path="/vistaus" element={<VistaUs />} />
-            <Route path="/contacto" element={<Contacto />} />
-            <Route path="/explorar" element={<ExplorarUs />} />
-            <Route path="/estadistica" element={<Estadistica />} />
-            <Route path="/acerca" element={<Acerca />} /> {/* nueva ruta */}
-            <Route path="/collage" element={<Collage />} /> {/* nueva ruta */}
-            <Route path="/collagePadre" element={<CollagePadre />} />
-            <Route path="*" element={<Navigate to="/vistaus" replace />} />
+            <Route
+              path="/"
+              element={<CollagePadre />}
+            />
+            <Route
+              path="/contacto"
+              element={<Contacto />}
+            />
+            <Route
+              path="/explorar"
+              element={<ExplorarUs />}
+            />
+            <Route
+              path="/estadistica"
+              element={<Estadistica />}
+            />
+            <Route
+              path="/acerca"
+              element={<Acerca />}
+            />
+            <Route
+              path="/collage"
+              element={<Collage />}
+            />
+            <Route
+              path="/collagePadre"
+              element={<CollagePadre />}
+            />
+            <Route
+              path="/perfil"
+              element={<Perfil />}
+            />
+            <Route
+              path="/sesion"
+              element={<Sesion setModoAdmin={setModoAdmin} />}
+            />
+            <Route
+              path="*"
+              element={<Navigate to="/collagePadre" replace />}
+            />
           </>
         )}
       </Routes>
+
+      {!modoAdmin && <Footer />}
     </>
   );
 }

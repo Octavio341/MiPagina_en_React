@@ -1,18 +1,22 @@
 import React from "react";
 
-export default function Collage({ onAbrirFicha }) {
-  const cuadros = [
-    { id: 1, texto: "Promoción", color: "#f8d7da", tipo: "cuadrado", imagen: "https://via.placeholder.com/350" },
-    { id: 2, texto: "Noticias", color: "#d1ecf1", tipo: "rectangulo", imagen: "https://via.placeholder.com/700x350" },
-    { id: 3, texto: "Eventos", color: "#d4edda", tipo: "cuadrado", imagen: "https://via.placeholder.com/350" },
-    { id: 4, texto: "Galería", color: "#fff3cd", tipo: "rectangulo", imagen: "https://via.placeholder.com/700x350" },
-    { id: 5, texto: "Contacto", color: "#e2e3e5", tipo: "cuadrado", imagen: "https://via.placeholder.com/350" },
-    { id: 6, texto: "Testimonios", color: "#f8f9fa", tipo: "rectangulo", imagen: "https://via.placeholder.com/700x350" },
-    { id: 7, texto: "Tienda", color: "#e0bbf9", tipo: "cuadrado", imagen: "https://via.placeholder.com/350" },
-    { id: 8, texto: "Tutoriales", color: "#c3e6cb", tipo: "rectangulo", imagen: "https://via.placeholder.com/700x350" },
-    { id: 9, texto: "Ayuda", color: "#bee5eb", tipo: "cuadrado", imagen: "https://via.placeholder.com/350" },
-    { id: 10, texto: "Blog", color: "#f5c6cb", tipo: "rectangulo", imagen: "https://via.placeholder.com/700x350" },
-  ];
+export default function Collage({ fichas, onAbrirFicha }) {
+  // Función para renderizar estrellas
+  const renderStars = (calificacion) => {
+    const max = 5;
+    const fullStars = Math.floor(calificacion);
+    const stars = [];
+
+    for (let i = 0; i < max; i++) {
+      if (i < fullStars) {
+        stars.push(<span key={i}>★</span>);
+      } else {
+        stars.push(<span key={i}>☆</span>);
+      }
+    }
+
+    return stars;
+  };
 
   return (
     <>
@@ -28,14 +32,14 @@ export default function Collage({ onAbrirFicha }) {
         }
 
         .cuadro {
+          position: relative;
           border-radius: 12px;
           overflow: hidden;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          cursor: pointer;
+          transition: transform 0.3s ease;
           display: flex;
           flex-direction: column;
-          background: white;
-          transition: transform 0.3s ease;
-          cursor: pointer;
+          justify-content: flex-end;
         }
 
         .cuadro:hover {
@@ -53,36 +57,73 @@ export default function Collage({ onAbrirFicha }) {
 
         .cuadro img {
           width: 100%;
-          height: 80%;
+          height: 100%;
           object-fit: cover;
-          flex-shrink: 0;
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: 0;
+        }
+
+        .cuadro .info {
+          position: relative;
+          z-index: 1;
+          background: rgba(0, 0, 0, 0.55);
+          color: white;
+          padding: 12px;
+          text-align: center;
+          font-family: sans-serif;
         }
 
         .cuadro h5 {
           margin: 0;
-          padding: 10px;
+          font-size: 1.1rem;
           font-weight: 600;
-          text-align: center;
-          color: #333;
-          flex-grow: 1;
+        }
+
+        .cuadro .extra {
+          font-size: 0.9rem;
+          margin-top: 6px;
           display: flex;
-          align-items: center;
           justify-content: center;
+          gap: 12px;
+          align-items: center;
+        }
+
+        .stars {
+          color: gold;
+          font-size: 1.1rem;
+        }
+
+        .views {
+          font-size: 0.95rem;
+          color: #ddd;
         }
       `}</style>
 
       <div className="grid-container">
-        {cuadros.map(({ id, texto, color, tipo, imagen }) => (
-          <div
-            key={id}
-            className={`cuadro ${tipo}`}
-            style={{ backgroundColor: color }}
-            onClick={() => onAbrirFicha({ id, texto, color, tipo, imagen })}
-          >
-            <img src={imagen} alt={texto} />
-            <h5>{texto}</h5>
-          </div>
-        ))}
+        {fichas.map((ficha, index) => {
+          const tipo = index % 2 === 0 ? "cuadrado" : "rectangulo";
+          const calificacion = parseFloat(ficha.calificacion) || 0;
+          const vistas = ficha.contar_vista || 0;
+
+          return (
+            <div
+              key={ficha._id || ficha.id}
+              className={`cuadro ${tipo}`}
+              onClick={() => onAbrirFicha(ficha)}
+            >
+              <img src={ficha.imagenPortada} alt={ficha.titulo} />
+              <div className="info">
+                <h5>{ficha.titulo}</h5>
+                <div className="extra">
+                  <span className="stars">{renderStars(calificacion)}</span>
+                  <span className="views">👁️ {vistas}</span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </>
   );

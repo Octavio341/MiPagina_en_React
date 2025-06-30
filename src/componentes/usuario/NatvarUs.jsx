@@ -49,8 +49,8 @@ function NatvarUs() {
           }}
         />
         <div style={{ position: 'relative', zIndex: 2 }}>
-          <h1 className="display-3 fw-bold">🌎 LIUNC</h1>
-          <p className="fs-4">Modo Usuario</p>
+          <h1 className="display-3 fw-bold">CADFICH</h1>
+          <p className="fs-3">Modo Usuario</p>
         </div>
       </div>
 
@@ -80,13 +80,11 @@ function NatvarUs() {
           <div className="collapse navbar-collapse" id="navbarContenido">
             <ul className="navbar-nav nav-fill w-100">
               {[
-                { to: '/vistaus', label: 'Inicio' },
+                { to: '/collagePadre', label: 'Inicio' },
                 { to: '/explorar', label: 'Explorar' },
                 { to: '/estadistica', label: 'Estadísticas' },
                 { to: '/contacto', label: 'Contacto' },
-                { to: '/acerca', label: 'Acerca' },
-                { to: '/collage', label: 'Collage' },
-                 { to: '/collagePadre', label: 'CollagePadre' },
+
               ].map(({ to, label }) => (
                 <li key={to} className="nav-item" style={{ flexGrow: 1, textAlign: 'center' }}>
                   <NavLink to={to} style={linkStyle} className="nav-link">

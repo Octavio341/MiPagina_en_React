@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function LoginRegistro() {
+function Sesion({ setModoAdmin }) {
   const navigate = useNavigate();
+
   const [modoRegistro, setModoRegistro] = useState(false);
 
   const [usuario, setUsuario] = useState('');
@@ -13,11 +14,15 @@ function LoginRegistro() {
   const [perfil, setPerfil] = useState('');
   const [error, setError] = useState('');
 
+  const handleLoginSuccess = (usuarioData) => {
+    localStorage.setItem('usuario', JSON.stringify(usuarioData));
+    if (setModoAdmin) setModoAdmin(true); // Activa modo admin al iniciar sesión
+    navigate('/perfil');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-
-    
 
     if (!usuario || !password) {
       setError('Usuario y contraseña son requeridos.');
@@ -72,10 +77,7 @@ function LoginRegistro() {
         const data = await response.json();
 
         if (response.ok) {
-          localStorage.setItem('usuario', JSON.stringify(data.usuario));
-          console.log(JSON.parse(localStorage.getItem('usuario')));
-
-          window.location.href = '/perfil';
+          handleLoginSuccess(data.usuario);
         } else {
           setError(data.mensaje || 'Error en el login');
         }
@@ -86,8 +88,18 @@ function LoginRegistro() {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center min-vh-100">
-      <div className="card shadow-lg p-4 bg-dark text-light" style={{ width: '100%', maxWidth: '450px', borderRadius: '1rem' }}>
+    <div className="container-fluid d-flex justify-content-center align-items-center vh-100 px-3">
+      <div
+        className="card shadow-lg bg-dark text-light"
+        style={{
+          width: '100%',
+          maxWidth: '600px',
+          borderRadius: '1rem',
+          padding: '2rem',
+          maxHeight: '90vh',
+          overflowY: 'auto',
+        }}
+      >
         <h2 className="text-center mb-4 text-info">
           {modoRegistro ? 'Registro' : 'Iniciar Sesión'}
         </h2>
@@ -96,37 +108,75 @@ function LoginRegistro() {
           {modoRegistro && (
             <>
               <div className="mb-3">
-                <input type="text" className="form-control" placeholder="Nombre completo" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Nombre completo"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  required
+                />
               </div>
               <div className="mb-3">
-                <input type="email" className="form-control" placeholder="Correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <input
+                  type="email"
+                  className="form-control"
+                  placeholder="Correo electrónico"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
               </div>
               <div className="mb-3">
-                <select className="form-select" value={rol} onChange={(e) => setRol(e.target.value)}>
+                <select
+                  className="form-select"
+                  value={rol}
+                  onChange={(e) => setRol(e.target.value)}
+                >
                   <option value="gestor">Gestor</option>
                   <option value="admin">Administrador</option>
                 </select>
               </div>
               <div className="mb-3">
-                <input type="text" className="form-control" placeholder="URL Foto de Perfil" value={perfil} onChange={(e) => setPerfil(e.target.value)} />
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="URL Foto de Perfil"
+                  value={perfil}
+                  onChange={(e) => setPerfil(e.target.value)}
+                />
               </div>
             </>
           )}
 
           <div className="mb-3">
-            <input type="text" className="form-control" placeholder="Usuario" value={usuario} onChange={(e) => setUsuario(e.target.value)} required />
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Usuario"
+              value={usuario}
+              onChange={(e) => setUsuario(e.target.value)}
+              required
+            />
           </div>
           <div className="mb-3">
-            <input type="password" className="form-control" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
 
-          <button type="submit" className="btn btn-outline-info w-100">
+          <button type="submit" className="btn btn-outline-info w-100 mb-3">
             {modoRegistro ? 'Registrarse' : 'Iniciar Sesión'}
           </button>
         </form>
 
         <p
-          className="mt-3 text-center"
+          className="text-center"
           style={{ cursor: 'pointer', color: '#0dcaf0' }}
           onClick={() => {
             setModoRegistro(!modoRegistro);
@@ -148,4 +198,4 @@ function LoginRegistro() {
   );
 }
 
-export default LoginRegistro;
+export default Sesion;
