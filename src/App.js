@@ -20,6 +20,7 @@ import ExplorarUs from './componentes/usuario/ExplorarUs';
 import Estadistica from './componentes/usuario/Estadistica';
 import Acerca from './componentes/Acerca'; // nuevo componente
 import Collage from './componentes/usuario/Collage'
+import CollagePadre from './componentes/usuario/CollagePadre';
 
 function App() {
   const [modoAdmin, setModoAdmin] = useState(false);
@@ -54,6 +55,7 @@ function App() {
             <Route path="/estadistica" element={<Estadistica />} />
             <Route path="/acerca" element={<Acerca />} /> {/* nueva ruta */}
             <Route path="/collage" element={<Collage />} /> {/* nueva ruta */}
+            <Route path="/collagePadre" element={<CollagePadre />} />
             <Route path="*" element={<Navigate to="/vistaus" replace />} />
           </>
         )}

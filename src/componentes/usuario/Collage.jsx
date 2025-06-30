@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function GridCuadradosRectangulares() {
+export default function Collage({ onAbrirFicha }) {
   const cuadros = [
     { id: 1, texto: "Promoción", color: "#f8d7da", tipo: "cuadrado", imagen: "https://via.placeholder.com/350" },
     { id: 2, texto: "Noticias", color: "#d1ecf1", tipo: "rectangulo", imagen: "https://via.placeholder.com/700x350" },
@@ -73,7 +73,12 @@ export default function GridCuadradosRectangulares() {
 
       <div className="grid-container">
         {cuadros.map(({ id, texto, color, tipo, imagen }) => (
-          <div key={id} className={`cuadro ${tipo}`} style={{ backgroundColor: color }}>
+          <div
+            key={id}
+            className={`cuadro ${tipo}`}
+            style={{ backgroundColor: color }}
+            onClick={() => onAbrirFicha({ id, texto, color, tipo, imagen })}
+          >
             <img src={imagen} alt={texto} />
             <h5>{texto}</h5>
           </div>

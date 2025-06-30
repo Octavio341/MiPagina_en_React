@@ -86,6 +86,7 @@ function NatvarUs() {
                 { to: '/contacto', label: 'Contacto' },
                 { to: '/acerca', label: 'Acerca' },
                 { to: '/collage', label: 'Collage' },
+                 { to: '/collagePadre', label: 'CollagePadre' },
               ].map(({ to, label }) => (
                 <li key={to} className="nav-item" style={{ flexGrow: 1, textAlign: 'center' }}>
                   <NavLink to={to} style={linkStyle} className="nav-link">
